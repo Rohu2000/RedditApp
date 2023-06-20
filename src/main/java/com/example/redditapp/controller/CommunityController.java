@@ -86,7 +86,7 @@ public class CommunityController {
 
    }
    @GetMapping("/community/removeModerator")
-   public String removeMemberToModerator(@RequestParam("userId") Long userId ,
+   public String removeMemberFromModerator(@RequestParam("userId") Long userId ,
                                       @RequestParam("communityId") Long communityId,
                                       Model model) {
        Community community = communityService.findCommunityById(communityId);
