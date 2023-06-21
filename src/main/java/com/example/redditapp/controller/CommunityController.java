@@ -20,7 +20,6 @@ public class CommunityController {
     @Autowired
     UserService userService;
 
-
     @GetMapping("/newcommunity")
     public String newCommunity(Model model){
         model.addAttribute("community", new Community());

@@ -251,7 +251,7 @@
           </div>
           <div id="div-community-people">
             <h4>Total Members :
-              <span th:text="${community.communityMembers.size()}" ></span></h4>
+              <span th:text="${community.communityMembers?.size() ?: 0}" ></span></h4>
           </div>
           <div id="nav-create-post">
             <a href="">Create Post</a>

@@ -53,6 +53,7 @@ public class CommunityService {
     }
 
     public void saveCommunity(Community community) {
+
         communityRepo.save(community);
     }
 
