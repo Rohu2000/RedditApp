@@ -57,19 +57,19 @@ public class CommunityController {
     }
 
     @GetMapping("/users/r")
-    public String viewMembers(@RequestParam(value = "communityId") Long communityId, Model model){
-     Community community = communityService.findCommunityById(communityId);
+    public String viewMembers(@RequestParam(value = "communityName") String communityName, Model model){
+     Community community = communityService.findCommunity(communityName);
      model.addAttribute("community",community);
      return "viewmembers";
 
     }
    @GetMapping("/community/addModerator")
    public String addMemberToModerator(@RequestParam("userId") Long userId ,
-                                      @RequestParam("communityId") Long communityId,
+                                      @RequestParam("communityName") String communityName,
                                       Model model)
    {
 
-       Community community = communityService.findCommunityById(communityId);
+       Community community = communityService.findCommunity(communityName);
        User user = userService.getUserById(userId);
        Set<User> moderators = community.getCommunityModerators();
        moderators.add(user);
@@ -82,14 +82,14 @@ public class CommunityController {
        communityService.saveCommunity(community);
        userService.saveUser(user);
        model.addAttribute("community",community);
-       return "redirect:/users/r?communityId="+communityId;
+       return "redirect:/users/r?communityName="+communityName;
 
    }
    @GetMapping("/community/removeModerator")
    public String removeMemberFromModerator(@RequestParam("userId") Long userId ,
-                                      @RequestParam("communityId") Long communityId,
+                                      @RequestParam("communityName") String communityName,
                                       Model model) {
-       Community community = communityService.findCommunityById(communityId);
+       Community community = communityService.findCommunity(communityName);
        User user = userService.getUserById(userId);
        Set<User> moderators = community.getCommunityModerators();
        moderators.remove(user);
@@ -101,20 +101,35 @@ public class CommunityController {
        communityService.saveCommunity(community);
        userService.saveUser(user);
        model.addAttribute("community",community);
-       return "redirect:/users/r?communityId="+communityId;
+       return "redirect:/users/r?communityName="+communityName;
 
    }
+   @GetMapping("/community/addUser")
+   public String addUserToCommunity(@RequestParam("userId") Long userId,
+                                    @RequestParam("communityName") String communityName,
+                                    Model model) {
+
+
+       Community community = communityService.findCommunity(communityName);
+       User user = userService.getUserById(userId);
+       community.getCommunityMembers().add(user);
+       communityService.saveCommunity(community);
+       model.addAttribute("community", community);
+       return "redirect:/users/r?communityName="+communityName;
+
+   }
+
     @GetMapping("/community/banUser")
     public String removeUserFromCommunity(@RequestParam("userId") Long userId,
-                                          @RequestParam("communityId") Long communityId,
+                                          @RequestParam("communityName") String communityName,
                                           Model model) {
-        Community community = communityService.findCommunityById(communityId);
+        Community community = communityService.findCommunity(communityName);
         User user = userService.getUserById(userId);
         community.getCommunityMembers().remove(user);
         community.getCommunityModerators().remove(user);
         communityService.saveCommunity(community);
         model.addAttribute("community", community);
-        return "redirect:/users/r?communityId="+communityId;
+        return "redirect:/users/r?communityName="+communityName;
     }
 
     @GetMapping("/updatecommunity/{id}")
