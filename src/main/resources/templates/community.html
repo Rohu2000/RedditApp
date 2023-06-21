@@ -250,7 +250,8 @@
             <span  th:text="${#dates.format(community.createdAt, 'dd-MMMM-YYYY')}"></span>
           </div>
           <div id="div-community-people">
-            <h4>Total Members : <span th:text="${community.communityMembers.size()}" ></span></h4>
+            <h4>Total Members :
+              <span th:text="${community.communityMembers.size()}" ></span></h4>
           </div>
           <div id="nav-create-post">
             <a href="">Create Post</a>

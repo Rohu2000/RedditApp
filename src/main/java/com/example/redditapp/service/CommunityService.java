@@ -1,9 +1,12 @@
 package com.example.redditapp.service;
 
 import com.example.redditapp.model.Community;
+import com.example.redditapp.model.User;
 import com.example.redditapp.repository.CommunityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class CommunityService {
@@ -41,7 +44,7 @@ public class CommunityService {
     public void deleteCommunity(Long id) {
         communityRepo.deleteById(id);
     }
-    public Community findCommunity(String communityName) {
+    public Community findCommunityByCommunityName(String communityName) {
         return communityRepo.findByCommunityName(communityName);
     }
     public Community findCommunityById(Long communityId) {
@@ -52,4 +55,29 @@ public class CommunityService {
     public void saveCommunity(Community community) {
         communityRepo.save(community);
     }
+
+    public void addMemberToModerator(Community community, User user) {
+        Set<User> moderators = community.getCommunityModerators();
+        moderators.add(user);
+        community.setCommunityModerators(moderators);
+        communityRepo.save(community);
+    }
+
+    public void removeMemberFromModerator(Community community, User user) {
+        Set<User> moderators = community.getCommunityModerators();
+        moderators.remove(user);
+        community.setCommunityModerators(moderators);
+        communityRepo.save(community);
+    }
+
+    public void removeUserFromCommunity(Community community, User user) {
+        Set<User> communityMembers = community.getCommunityMembers();
+        Set<User> communityModerators = community.getCommunityModerators();
+
+        communityMembers.remove(user);
+        communityModerators.remove(user);
+
+        communityRepo.save(community);
+    }
 }
+
